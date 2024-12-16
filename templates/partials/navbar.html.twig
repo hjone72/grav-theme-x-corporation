@@ -3,14 +3,14 @@
     {% for p in page.children.visible %}
         {% set current_page = (p.active or p.activeChild) ? 'active' : '' %}
         {% if p.children.visible.count > 0 %}
-            <li class="dropdown m-menu-fw {{ current_page }}">
-                <a href="#" data-toggle="dropdown" class="dropdown-toggle">{{ p.menu }}
+            <li class="nav-item dropdown">
+                <a href="#" data-bs-toggle="dropdown" class="nav-link dropdown-toggle {{ current_page }}">{{ p.menu }}
                 <span><i class="fa fa-angle-down"></i></span></a>
 
                     {% if p.children.visible.count > 0 %}
                     <ul class="dropdown-menu">
                     {% for dropdownHeader in p.children.visible %}
-                        <li class="m-menu-content">
+                        <li>
                             <ul class="col-sm-{{ (12 / p.children.visible.count)|round }}">
                             {% if dropdownHeader.children.visible.count > 0 %}
                             <li class="dropdown-header">{{ dropdownHeader.menu }}</li>
@@ -27,49 +27,28 @@
                     {% endif %}
             </li>
         {% else %}
-            <li class="{{ current_page }}">
-                <a href="{{ p.url }}">{{ p.menu }}</a>
+            <li class="nav-item">
+                <a class="nav-link {{ current_page }}" aria-current="page" href="{{ p.url }}">{{ p.menu }}</a>
             </li>
         {% endif %}
     {% endfor %}
 {% endmacro %}
 {% endspaceless %}
 
-<nav class="navbar m-menu navbar-default navbar-fixed-top">
-    <div class="container">
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
-                    data-target="#navbar-collapse-1">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            {% if logo != '' %}
-            <a class="navbar-brand" href="{{ base_url == '' ? '/' : base_url }}">
-                <img src="{{ url('theme://img/' ~ logo) }}" alt="">
-            </a>
-            {% endif %}
-        </div>
-
-        <div class="collapse navbar-collapse" id="#navbar-collapse-1">
-            {% if config.plugins.simplesearch.enabled %}
-            <ul class="nav-cta hidden-xs">
-                <li class="dropdown"><a href="#" data-toggle="dropdown" class="dropdown-toggle"><i
-                        class="fa fa-search"></i></a>
-                    <ul class="dropdown-menu">
-                        <li>
-                            {% include 'partials/simplesearch_searchbox.html.twig' %}
-                        </li>
-                    </ul>
-                </li>
-            </ul>
-            {% endif %}
-
-            <ul class="nav navbar-nav navbar-right main-nav">
-                {{ _self.loop(pages) }}
-            </ul>
-
-        </div>
+<nav class="navbar navbar-expand-lg bg-body-tertiary">
+  <div class="container-fluid">
+    {% if logo != '' %}
+        <a class="navbar-brand" href="{{ base_url == '' ? '/' : base_url }}">
+            <img src="{{ url('theme://img/' ~ logo) }}" alt="">
+        </a>
+    {% endif %}
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNavDropdown">
+      <ul class="navbar-nav">
+        {{ _self.loop(pages) }}
+      </ul>
     </div>
+  </div>
 </nav>
